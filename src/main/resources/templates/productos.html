@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments :: head('Productos')}"></head>
+    <body>
+        <header th:replace="~{fragments :: header('productos')}"></header>
+        <main class="dashboard">
+            <div class="heading">
+                <div>
+                    <p class="eyebrow">CONTROL SIMPLE. DECISIONES CLARAS.</p>
+                    <h1>
+                        Tu inventario,
+                        <br />
+                        <span>bajo control.</span>
+                    </h1>
+                    <p class="muted">
+                        Todos tus productos en un solo lugar. Organiza, consulta y sigue creciendo.
+                    </p>
+                </div>
+                <a class="button" th:href="@{/productos/nuevo}">+ Nuevo producto</a>
+            </div>
+            <div th:replace="~{fragments :: mensajes}"></div>
+            <section class="stats" aria-label="Resumen general">
+                <div class="stat">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        >
+                            <path d="m12 3 9 5-9 5-9-5 9-5ZM3 8v9l9 5 9-5V8M12 13v9" />
+                        </svg>
+                    </span>
+                    <span>Productos registrados</span>
+                    <strong th:text="${total}">0</strong>
+                    <small>En todo el inventario</small>
+                </div>
+                <div class="stat warning">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        >
+                            <path d="m12 3 10 18H2L12 3Z" />
+                            <path d="M12 9v5m0 3v1" />
+                        </svg>
+                    </span>
+                    <span>Productos con bajo stock</span>
+                    <strong th:text="${bajoStock}">0</strong>
+                    <small>Con 5 unidades o menos</small>
+                </div>
+                <div class="stat">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        >
+                            <rect x="3" y="3" width="7" height="7" rx="1" />
+                            <rect x="14" y="3" width="7" height="7" rx="1" />
+                            <rect x="3" y="14" width="7" height="7" rx="1" />
+                            <rect x="14" y="14" width="7" height="7" rx="1" />
+                        </svg>
+                    </span>
+                    <span>Categorías</span>
+                    <strong th:text="${#lists.size(categorias)}">0</strong>
+                    <small>Para organizar tu catálogo</small>
+                </div>
+            </section>
+            <section class="panel">
+                <form class="filters" method="get" th:action="@{/productos}">
+                    <div class="search">
+                        <label for="nombre">Buscar producto</label>
+                        <input
+                            id="nombre"
+                            name="nombre"
+                            th:value="${nombre}"
+                            placeholder="Escribe un nombre…"
+                        />
+                    </div>
+                    <div>
+                        <label for="categoriaId">Categoría</label>
+                        <select id="categoriaId" name="categoriaId">
+                            <option value="">Todas las categorías</option>
+                            <option
+                                th:each="c : ${categorias}"
+                                th:value="${c.id}"
+                                th:text="${c.nombre}"
+                                th:selected="${c.id == categoriaId}"
+                            ></option>
+                        </select>
+                    </div>
+                    <button class="button" type="submit">Filtrar</button>
+                    <a class="text-link" th:href="@{/productos}">Limpiar</a>
+                </form>
+                <div class="table-heading">
+                    <h2>Catálogo de productos</h2>
+                    <span class="muted" th:text="${#lists.size(productos)} + ' resultados'"></span>
+                </div>
+                <div class="table-wrap" th:unless="${#lists.isEmpty(productos)}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p : ${productos}">
+                                <td
+                                    data-label="Nombre"
+                                    class="product-name"
+                                    th:text="${p.nombre}"
+                                ></td>
+                                <td data-label="Categoría">
+                                    <span
+                                        class="category-tag"
+                                        th:text="${p.categoria.nombre}"
+                                    ></span>
+                                </td>
+                                <td
+                                    data-label="Precio"
+                                    th:text="${#numbers.formatDecimal(p.precio, 1, 'COMMA', 2, 'POINT')}"
+                                ></td>
+                                <td data-label="Stock" th:text="${p.stock} + ' uds.'"></td>
+                                <td data-label="Estado">
+                                    <span
+                                        class="badge"
+                                        th:classappend="${p.bajoStock} ? 'low' : 'ok'"
+                                        th:text="${p.bajoStock} ? 'Bajo Stock' : 'Disponible'"
+                                    ></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty" th:if="${#lists.isEmpty(productos)}">
+                    <h2>No hay productos para mostrar</h2>
+                    <p>Prueba con otro filtro o registra tu primer producto.</p>
+                    <a th:href="@{/productos/nuevo}" class="text-link">Registrar producto →</a>
+                </div>
+            </section>
+            <p class="hint">
+                ● Bajo Stock: productos con 5 unidades o menos. Los precios se muestran con dos
+                decimales.
+            </p>
+        </main>
+        <footer th:replace="~{fragments :: footer}"></footer>
+    </body>
+</html>

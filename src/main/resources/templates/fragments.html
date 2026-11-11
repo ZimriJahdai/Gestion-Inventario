@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head(titulo)">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title th:text="${titulo} + ' | Inventario'">Inventario</title>
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    </head>
+    <body>
+        <header th:fragment="header(activo)" class="header">
+            <a class="brand" th:href="@{/productos}">
+                <span class="brand-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                        <path d="m12 3 9 5-9 5-9-5 9-5Z" />
+                        <path d="M3 8v9l9 5 9-5V8M12 13v9M7.5 5.5l9 5" />
+                    </svg>
+                </span>
+                inventario
+                <span class="brand-dot">.</span>
+            </a>
+            <nav aria-label="Navegación principal">
+                <a th:href="@{/productos}" th:classappend="${activo == 'productos'} ? 'active'">
+                    Productos
+                </a>
+                <a th:href="@{/categorias}" th:classappend="${activo == 'categorias'} ? 'active'">
+                    Categorías
+                </a>
+            </nav>
+            <span class="header-note">
+                <span class="status-dot" aria-hidden="true"></span>
+                GESTIÓN DE INVENTARIO
+            </span>
+        </header>
+        <div th:fragment="mensajes" aria-live="polite">
+            <p th:if="${exito}" th:text="${exito}" class="notice success"></p>
+            <p th:if="${error}" th:text="${error}" class="notice error"></p>
+        </div>
+        <footer th:fragment="footer">
+            Inventario de tienda
+            <span>Simple. Claro. Bajo control.</span>
+        </footer>
+    </body>
+</html>

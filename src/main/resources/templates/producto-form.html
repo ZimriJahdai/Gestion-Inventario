@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments :: head('Nuevo producto')}"></head>
+    <body>
+        <header th:replace="~{fragments :: header('productos')}"></header>
+        <main class="form-main">
+            <a class="text-link" th:href="@{/productos}">← Volver a productos</a>
+            <div class="heading">
+                <div>
+                    <p class="eyebrow">AMPLÍA TU CATÁLOGO</p>
+                    <h1>Nuevo producto</h1>
+                    <p class="muted">Completa los datos para agregarlo al inventario.</p>
+                </div>
+            </div>
+            <section class="panel form-panel">
+                <p th:if="${#lists.isEmpty(categorias)}" class="notice error">
+                    No hay categorías disponibles. Carga las categorías desde database.sql antes de
+                    registrar productos.
+                </p>
+                <form method="post" th:action="@{/productos}" th:object="${productoForm}">
+                    <div th:if="${#fields.hasGlobalErrors()}" class="notice error">
+                        <p th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p>
+                    </div>
+                    <div class="field">
+                        <label for="nombre">Nombre del producto</label>
+                        <input
+                            id="nombre"
+                            th:field="*{nombre}"
+                            maxlength="150"
+                            required
+                            placeholder="Ej. Teclado USB"
+                        />
+                        <p class="field-error" th:errors="*{nombre}"></p>
+                    </div>
+                    <div class="field">
+                        <label for="categoriaId">Categoría</label>
+                        <select id="categoriaId" th:field="*{categoriaId}" required>
+                            <option value="">Selecciona una categoría</option>
+                            <option
+                                th:each="c : ${categorias}"
+                                th:value="${c.id}"
+                                th:text="${c.nombre}"
+                            ></option>
+                        </select>
+                        <p class="field-error" th:errors="*{categoriaId}"></p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="precio">Precio</label>
+                            <input
+                                id="precio"
+                                th:field="*{precio}"
+                                type="number"
+                                min="0.01"
+                                max="99999999.99"
+                                step="0.01"
+                                required
+                                placeholder="0.00"
+                            />
+                            <p class="field-error" th:errors="*{precio}"></p>
+                        </div>
+                        <div class="field">
+                            <label for="stock">Stock inicial</label>
+                            <input
+                                id="stock"
+                                th:field="*{stock}"
+                                type="number"
+                                min="0"
+                                max="2147483647"
+                                step="1"
+                                required
+                                placeholder="0"
+                            />
+                            <p class="field-error" th:errors="*{stock}"></p>
+                        </div>
+                    </div>
+                    <p class="form-tip">
+                        Con 5 unidades o menos, el producto se marcará como Bajo Stock.
+                    </p>
+                    <div class="form-actions">
+                        <a class="button secondary" th:href="@{/productos}">Cancelar</a>
+                        <button
+                            class="button"
+                            type="submit"
+                            th:disabled="${#lists.isEmpty(categorias)}"
+                        >
+                            Guardar producto
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+        <footer th:replace="~{fragments :: footer}"></footer>
+    </body>
+</html>

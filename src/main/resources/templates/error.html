@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments :: head('Solicitud no disponible')}"></head>
+    <body>
+        <header th:replace="~{fragments :: header('')}"></header>
+        <main>
+            <section class="panel empty">
+                <p class="eyebrow" th:text="${status}"></p>
+                <h1>No pudimos completar la solicitud</h1>
+                <p>Revisa la dirección y los datos ingresados e inténtalo de nuevo.</p>
+                <a class="button" th:href="@{/productos}">Volver al inventario</a>
+            </section>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments :: head('Categorías')}"></head>
+    <body>
+        <header th:replace="~{fragments :: header('categorias')}"></header>
+        <main>
+            <div class="heading">
+                <div>
+                    <p class="eyebrow">ORGANIZA TU INVENTARIO</p>
+                    <h1>Categorías</h1>
+                    <p class="muted">
+                        Las categorías con productos asociados no se pueden eliminar.
+                    </p>
+                </div>
+            </div>
+            <div th:replace="~{fragments :: mensajes}"></div>
+            <section class="category-grid">
+                <article class="panel category" th:each="c : ${categorias}">
+                    <span class="category-icon">▦</span>
+                    <h2 th:text="${c.nombre}"></h2>
+                    <p class="muted" th:text="'Categoría #' + ${c.id}"></p>
+                    <details>
+                        <summary class="text-link danger">Eliminar categoría</summary>
+                        <p>¿Confirmas que deseas eliminar esta categoría?</p>
+                        <form method="post" th:action="@{/categorias/{id}/eliminar(id=${c.id})}">
+                            <button class="button destructive" type="submit">
+                                Confirmar eliminación
+                            </button>
+                        </form>
+                    </details>
+                </article>
+            </section>
+            <div class="panel empty" th:if="${#lists.isEmpty(categorias)}">
+                <h2>No hay categorías</h2>
+                <p>Para cargar los datos iniciales, consulta las instrucciones del proyecto.</p>
+            </div>
+        </main>
+        <footer th:replace="~{fragments :: footer}"></footer>
+    </body>
+</html>
