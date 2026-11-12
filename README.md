@@ -16,7 +16,7 @@ Aplicación web para registrar productos, consultar existencias y gestionar cate
 
 
 
-Ejecuta estos comandos en orden, en la carpeta del proyecto:
+Ejecuta estos comandos linea por linea, en la carpeta del proyecto: (no copies todo junto por que te puede dar error)
 
 ```powershell
 # 1. Selecciona Java 21. Ajusta la ruta si es diferente.
