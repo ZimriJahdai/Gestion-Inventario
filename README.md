@@ -6,32 +6,45 @@ Aplicación web para registrar productos, consultar existencias y gestionar cate
 
 - JDK 21.
 - MySQL Server 8.0.16 o superior.
-- Internet para descargar las dependencias al iniciar por primera vez. No necesitas instalar Maven.
+- descargar las dependencias al iniciar por primera vez. No necesitas instalar Maven.
 
 ## Ejecutar el proyecto
 
 1. Descarga o clona este repositorio y abre la carpeta del proyecto.
 2. En MySQL Workbench, abre `database.sql` y ejecuta todo el script **una sola vez**. Crea la base `inventario`, las tablas y los datos de ejemplo.
-3. Abre PowerShell en la carpeta que contiene `pom.xml` y ejecuta:
+3. Abre PowerShell en la carpeta del proyecto y ejecuta:
+
+
+
+Ejecuta estos comandos en orden, en la carpeta del proyecto:
 
 ```powershell
-# Ajusta esta ruta si instalaste el JDK en otra carpeta.
+# 1. Selecciona Java 21. Ajusta la ruta si es diferente.
 $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
+# 2. Ejecuta esta línea y después escribe tu usuario de MySQL.
 $env:DB_USER = Read-Host "Usuario de MySQL (por ejemplo, root)"
+
+# 3. Ejecuta esta línea e ingresa tu contraseña en la ventana que aparece.
 $credencial = Get-Credential -UserName $env:DB_USER -Message "Ingresa tu contraseña de MySQL"
+
+# 4. Guarda la contraseña para que la aplicación pueda conectarse.
 $env:DB_PASSWORD = $credencial.GetNetworkCredential().Password
 Remove-Variable credencial
 
+# 5. Descarga las dependencias necesarias e inicia la aplicación.
 .\mvnw.cmd spring-boot:run
 ```
 
-Escribe tu contraseña en la ventana que aparece. Usa las credenciales de tu servidor MySQL; el proyecto no incluye una contraseña predeterminada.
+Usa las credenciales de tu servidor MySQL; el proyecto no incluye una contraseña predeterminada.
 
-4. Abre [http://localhost:8080/productos](http://localhost:8080/productos).
+Cuando aparezca **Started InventarioApplication**, abre:
+[http://localhost:8080/productos](http://localhost:8080/productos).
 
-La conexión apunta a `localhost:3306/inventario`. Si necesitas cambiarla, edita `src/main/resources/application.properties`. Para detener la aplicación, pulsa **Ctrl + C**. Al abrir otra terminal, vuelve a configurar las variables.
+Mantén la terminal abierta mientras usas la aplicación. Para detenerla, pulsa **Ctrl + C**.
+
+La conexión apunta a `localhost:3306/inventario`. Si necesitas cambiarla, edita `src/main/resources/application.properties`. Al abrir otra terminal, vuelve a ejecutar el bloque completo.
 
 ## Cómo usarlo
 
